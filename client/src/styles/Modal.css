@@ -1,0 +1,72 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .modal-content {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .modal-content h2 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    color: #1a1a1a;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  
+  .modal-content .form {
+      flex-grow: 1;
+      overflow: visible;
+      min-height: 0;
+  }
+  
+  .modal-content button[type="submit"].primary-btn {
+    display: block;
+    width: 100%;
+    max-width: 300px;
+    margin: 1.5rem auto 0 auto;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 768px) {
+    .modal-content {
+      padding: 1.5rem;
+      max-width: 90%;
+      max-height: 88vh;
+    }
+  }
+  @media (max-width: 480px) {
+      .modal-content h2 {
+          font-size: 1.3rem;
+          margin-bottom: 1rem;
+      }
+       .modal-content {
+          padding: 1rem 1rem;
+          max-height: 90vh;
+      }
+       .modal-content button[type="submit"].primary-btn {
+          margin-top: 1rem;
+          max-width: 100%;
+       }
+  }

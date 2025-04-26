@@ -1,0 +1,249 @@
+.card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    padding: 2rem 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  @media (max-width: 768px) {
+      .card {
+          padding: 1.5rem 1rem;
+          margin-bottom: 1.5rem;
+      }
+  }
+  @media (max-width: 480px) {
+      .card {
+          padding: 1rem 0.8rem;
+          margin-bottom: 1rem;
+      }
+  }
+  
+  
+  .form-group {
+    padding: 0;
+    margin-bottom: 1rem;
+  }
+
+  .modal-content > .form > .form-group {
+     margin-bottom: 1rem;
+  }
+
+  .modal-content .event-form-grid .form-group {
+      margin-bottom: 1rem;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #333;
+    font-weight: 500;
+  }
+  
+  .input-wrapper {
+    position: relative;
+    width: 100%;
+  }
+  
+  .form input,
+  .form-control {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    font-family: inherit;
+  }
+
+  .form-control {
+     padding: 10px 12px;
+     font-size: 0.95rem;
+     border-radius: 6px;
+  }
+  
+  .form input[type="email"],
+  .form input[type="text"],
+  .form input[type="password"] {
+     padding-right: 35px;
+  }
+  
+  .form input:focus,
+  .form-control:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  }
+
+  .form-control:focus {
+     box-shadow: 0 0 0 0.15rem rgba(0, 123, 255, 0.25);
+  }
+  
+  .error-message {
+    color: #dc3545;
+    font-size: 0.875em;
+    margin-top: 4px;
+    display: block;
+  }
+  
+  .form input.input-error,
+  .form-control.input-error,
+  textarea.input-error,
+  select.input-error
+  {
+    border-color: #dc3545;
+  }
+  
+  .form input.input-error:focus,
+  .form-control.input-error:focus,
+  textarea.input-error:focus,
+  select.input-error:focus
+  {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+  }
+  .form-control.input-error:focus,
+  select.input-error:focus {
+     box-shadow: 0 0 0 0.15rem rgba(220, 53, 69, 0.25);
+  }
+  
+  .clear-input-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    padding: 4px;
+    margin: 0;
+    cursor: pointer;
+    color: #999;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .clear-input-btn:hover {
+    color: #333;
+  }
+  
+  .clear-input-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .primary-btn,
+  .secondary-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    text-align: center;
+    vertical-align: middle;
+    transition: background-color 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+    display: inline-block;
+    white-space: nowrap;
+  }
+  
+  .primary-btn {
+    background: #007bff;
+    color: white;
+  }
+  
+  .secondary-btn {
+    background: #6c757d;
+    color: white;
+  }
+  
+  .primary-btn:hover:not(:disabled) {
+    background: #0056b3;
+    box-shadow: 0 2px 5px rgba(0, 86, 179, 0.3);
+  }
+  .secondary-btn:hover:not(:disabled) {
+    background: #5a6268;
+    box-shadow: 0 2px 5px rgba(90, 98, 104, 0.3);
+  }
+  .primary-btn:focus-visible,
+  .secondary-btn:focus-visible {
+      outline: 2px solid #0056b3;
+      outline-offset: 2px;
+  }
+  
+  .primary-btn:disabled,
+  .secondary-btn:disabled {
+    background-color: #adb5bd;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+  
+  .small-btn {
+      padding: 8px 15px;
+      font-size: 0.9rem;
+  }
+  
+  .logout-icon-btn {
+    background: none;
+    border: none;
+    padding: 6px;
+    margin: 0;
+    cursor: pointer;
+    color: #dc3545;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+  
+  .logout-icon-btn svg {
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
+  }
+  
+  .logout-icon-btn:hover:not(:disabled) {
+    background-color: rgba(220, 53, 69, 0.1);
+  }
+  
+  .logout-icon-btn:focus-visible {
+      outline: 2px solid #dc3545;
+      outline-offset: 2px;
+      background-color: rgba(220, 53, 69, 0.1);
+  }
+  
+  .logout-icon-btn:disabled {
+    color: #adb5bd;
+    cursor: not-allowed;
+    background: none;
+  }
+  
+  @media (max-width: 480px) {
+      .primary-btn, .secondary-btn {
+          padding: 8px 14px;
+          font-size: 0.9rem;
+      }
+      .logout-icon-btn svg {
+          width: 20px;
+          height: 20px;
+      }
+       .logout-icon-btn {
+          padding: 4px;
+      }
+       .clear-input-btn {
+          right: 6px;
+       }
+       .clear-input-btn svg {
+          width: 14px;
+          height: 14px;
+       }
+       .form input[type="email"],
+       .form input[type="text"],
+       .form input[type="password"] {
+         padding-right: 30px;
+       }
+  }

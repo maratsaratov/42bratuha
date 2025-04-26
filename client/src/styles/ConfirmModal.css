@@ -1,0 +1,58 @@
+/* src/styles/ConfirmModal.css */
+
+.modal-content.confirm-modal-content {
+    max-width: 450px;
+    text-align: center;
+}
+
+.confirm-modal-content h2 {
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+}
+
+.confirm-message {
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+    color: #555;
+}
+
+.confirm-footer {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    padding-top: 1rem;
+}
+
+.confirm-btn-delete {
+    background-color: #dc3545;
+    color: white;
+    border-color: #dc3545;
+}
+
+.confirm-btn-delete:hover:not(:disabled) {
+    background-color: #c82333;
+    border-color: #bd2130;
+    box-shadow: 0 2px 5px rgba(220, 53, 69, 0.4);
+}
+
+.confirm-btn-delete:focus-visible {
+    outline: 2px solid #c82333;
+    outline-offset: 2px;
+}
+
+.confirm-btn-delete:disabled {
+    background-color: #e9a8ad;
+    border-color: #e9a8ad;
+    box-shadow: none;
+}
+
+@media (max-width: 480px) {
+    .confirm-footer {
+        flex-direction: column-reverse;
+        gap: 0.75rem;
+    }
+    .confirm-footer .primary-btn,
+    .confirm-footer .secondary-btn {
+        width: 100%;
+    }
+}

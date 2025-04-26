@@ -1,0 +1,151 @@
+.control-bar {
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+}
+
+.search-input-wrapper {
+    flex-grow: 1;
+    min-width: 250px;
+    position: relative;
+}
+
+.search-input {
+    padding-right: 30px;
+}
+
+.clear-search-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    line-height: 1;
+    padding: 0 5px;
+    cursor: pointer;
+    color: #999;
+}
+.clear-search-btn:hover {
+    color: #333;
+}
+
+.control-buttons {
+    display: flex;
+    gap: 0.75rem;
+    flex-shrink: 0;
+    align-items: center;
+}
+
+.filter-btn, .add-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 8px 15px;
+}
+
+.filter-btn .filter-indicator {
+    display: inline-block;
+    color: #007bff;
+    font-size: 1.5em;
+    line-height: 1;
+    margin-left: -2px;
+    vertical-align: middle;
+}
+
+.filter-btn.filter-active {
+    border: 1px solid #007bff;
+    background-color: #e7f3ff;
+    color: #0056b3;
+}
+.filter-btn.filter-active:hover:not(:disabled) {
+     background: #cfe5ff;
+}
+
+.view-toggle-group {
+    display: inline-flex;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.view-toggle-btn {
+    background-color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    color: #555;
+    transition: background-color 0.2s, color 0.2s;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.view-toggle-btn:hover {
+    background-color: #f0f0f0;
+}
+
+.view-toggle-btn.active {
+    background-color: #6c757d;
+    color: white;
+}
+.view-toggle-btn:focus-visible {
+    outline: 2px solid #5a6268;
+    outline-offset: -1px;
+    z-index: 1;
+}
+
+@media (max-width: 992px) {
+     .control-buttons {
+         flex-wrap: wrap;
+         justify-content: flex-end;
+     }
+     .view-toggle-group {
+        order: -1;
+     }
+}
+
+@media (max-width: 768px) {
+    .control-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .search-input-wrapper {
+        min-width: 100%;
+    }
+    .control-buttons {
+        justify-content: space-between;
+        width: 100%;
+        order: 0;
+    }
+    .view-toggle-group {
+        order: 0;
+        justify-content: center;
+    }
+    .filter-btn, .add-btn {
+        flex-grow: 1;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+     .control-buttons {
+        flex-direction: column;
+        gap: 0.5rem;
+     }
+     .filter-btn, .add-btn {
+        width: 100%;
+     }
+     .view-toggle-group {
+        width: 100%;
+        justify-content: center;
+     }
+     .view-toggle-btn {
+        flex-grow: 1;
+     }
+}

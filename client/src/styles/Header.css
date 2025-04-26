@@ -1,0 +1,78 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #eee;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  
+  .header-content {
+    text-align: left;
+    flex-grow: 1;
+  }
+  
+  .header h1 {
+    color: #1a1a1a;
+    font-size: 2.5rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  .header p {
+    color: #666;
+    font-size: 1.1rem;
+    margin: 0;
+  }
+  
+  .auth-buttons {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  
+  .auth-buttons span {
+    margin-right: 15px;
+    color: #333;
+    white-space: nowrap;
+  }
+  
+  @media (max-width: 768px) {
+    .header {
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+    .header-content {
+        text-align: left;
+        min-width: auto;
+    }
+     .header h1 {
+        font-size: 1.8rem;
+     }
+     .header p {
+         font-size: 1rem;
+     }
+     .auth-buttons {
+         justify-content: flex-end;
+         width: auto;
+     }
+     .auth-buttons span {
+         margin-right: 10px;
+     }
+  }
+  
+  @media (max-width: 480px) {
+      .header h1 {
+        font-size: 1.5rem;
+      }
+      .header p {
+          font-size: 0.9rem;
+      }
+      .auth-buttons {
+          gap: 8px;
+      }
+  }

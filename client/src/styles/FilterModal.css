@@ -1,0 +1,36 @@
+/* src/styles/FilterModal.css */
+
+.modal-content.filter-modal-content {
+    max-width: 750px;
+}
+
+.modal-filter-grid {
+    margin-bottom: 1.5rem;
+}
+
+.modal-filter-grid .form-group {
+    margin-bottom: 0;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #eee;
+    margin-top: auto;
+    flex-shrink: 0;
+}
+
+@media (max-width: 480px) {
+    .modal-footer {
+        flex-direction: column-reverse;
+        gap: 0.5rem;
+        align-items: stretch;
+    }
+    .modal-footer .primary-btn,
+    .modal-footer .secondary-btn {
+        width: 100%;
+        text-align: center;
+    }
+}

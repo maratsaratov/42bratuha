@@ -1,0 +1,76 @@
+.modal-content.event-form-modal {
+    max-width: 700px;
+    max-height: 85vh;
+}
+
+.event-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem 1.5rem;
+}
+.event-form-grid .full-width {
+    grid-column: 1 / -1;
+}
+
+.event-form-modal textarea.form-control {
+    min-height: 100px;
+    resize: vertical;
+    font-family: inherit;
+}
+
+.event-form-modal .checkbox-group {
+    margin-bottom: 1rem;
+    grid-column: 1 / -1;
+}
+.event-form-modal .checkbox-group label {
+    font-weight: 500;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+.event-form-modal .checkbox-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+.event-form-modal .checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+.event-form-modal input[type="checkbox"] {
+    width: auto;
+    accent-color: #007bff;
+    margin: 0;
+    vertical-align: middle;
+}
+.event-form-modal .checkbox-item label {
+    margin-bottom: 0;
+    font-weight: normal;
+    cursor: pointer;
+    color: #333;
+    display: inline;
+}
+
+@media (max-width: 768px) {
+     .modal-content.event-form-modal {
+        max-width: 90%;
+    }
+     .event-form-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem 0;
+    }
+    .event-form-grid .full-width {
+        grid-column: 1 / -1;
+    }
+    .event-form-modal .checkbox-group {
+         grid-column: 1 / -1;
+    }
+
+}
+@media (max-width: 480px) {
+     .event-form-modal .checkbox-options {
+        gap: 0.8rem;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
