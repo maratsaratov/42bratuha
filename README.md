@@ -64,6 +64,7 @@ python -c 'import secrets; print(secrets.token_hex(32))'
 flask db init
 flask db migrate -m "Initial migration."
 flask db upgrade
+flask init-db
 ```
 
 Если в будущем вы измените модели (models.py), повторите:
@@ -95,7 +96,7 @@ npm install
 
 ```bash
 cd server
-flask run
+python app.py
 ```
 
 Сервер будет доступен по адресу http://127.0.0.1:5000 (или http://localhost:5000)

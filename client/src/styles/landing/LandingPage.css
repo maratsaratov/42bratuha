@@ -1,0 +1,124 @@
+body {
+  padding: 0px;
+}
+
+.landing-page-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #ffffff; 
+}
+
+.landing-main-content {
+  flex-grow: 1;
+}
+
+.landing-section-padding {
+  padding: 70px 0;
+}
+
+.landing-container {
+  max-width: 1140px; 
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.landing-section-title {
+  text-align: center;
+  font-size: 2.8rem;
+  color: #2c3e50;
+  margin-bottom: 60px;
+  font-weight: 700;
+  position: relative;
+  padding-bottom: 15px;
+}
+
+.landing-section-title::after {
+  content: '';
+  position: absolute;
+  display: block;
+  width: 80px;
+  height: 4px;
+  background: #007bff;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.btn-landing {
+  padding: 14px 28px;
+  border-radius: 50px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  border: 2px solid transparent;
+  line-height: 1.5;
+  letter-spacing: 0.5px;
+}
+
+.btn-landing-primary {
+  background-color: #007bff; 
+  color: white;
+  box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+}
+.btn-landing-primary:hover,
+.btn-landing-primary:focus {
+  background-color: #0056b3;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 86, 179, 0.35);
+  outline: none;
+}
+
+.btn-landing-secondary {
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #007bff;
+  border: 2px solid #007bff;
+  box-shadow: 0 5px 15px rgba(0, 123, 255, 0.15);
+}
+.btn-landing-secondary:hover,
+.btn-landing-secondary:focus {
+  background-color: #007bff;
+  color: white;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 123, 255, 0.3);
+  outline: none;
+}
+
+
+@media (max-width: 992px) {
+  .landing-section-padding {
+    padding: 60px 0;
+  }
+  .landing-section-title {
+    font-size: 2.4rem;
+    margin-bottom: 50px;
+  }
+  .landing-section-title::after {
+    width: 70px;
+    height: 3px;
+  }
+}
+
+@media (max-width: 768px) {
+  .landing-section-padding {
+    padding: 50px 0;
+  }
+  .landing-section-title {
+    font-size: 2rem;
+    margin-bottom: 40px;
+  }
+   .landing-section-title::after {
+    width: 60px;
+  }
+  .landing-container {
+    padding: 0 15px;
+  }
+  .btn-landing {
+    padding: 12px 24px;
+    font-size: 1rem;
+  }
+}

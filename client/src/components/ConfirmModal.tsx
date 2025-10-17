@@ -17,13 +17,27 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
     onConfirm,
     title,
     message,
-    confirmText = 'Confirm',
-    cancelText = 'Cancel',
+    confirmText = 'Подтвердить',
+    cancelText = 'Отмена',
     isLoading = false,
 }) => {
     if (!isOpen) {
         return null;
     }
+
+    const isDeleteAction = confirmText === 'Удалить навсегда';
+    const isArchiveAction = confirmText === 'Архивировать';
+    const isRestoreAction = confirmText === 'Восстановить';
+
+    let confirmButtonClass = "primary-btn small-btn";
+    if (isDeleteAction) {
+        confirmButtonClass += " confirm-btn-delete";
+    } else if (isArchiveAction) {
+        confirmButtonClass += " confirm-btn-archive";
+    } else if (isRestoreAction) {
+        confirmButtonClass += " confirm-btn-restore";
+    }
+
 
     return (
         <div className="modal-overlay" onClick={!isLoading ? onClose : undefined}>
@@ -42,10 +56,10 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
                     </button>
                     <button
                         onClick={onConfirm}
-                        className="primary-btn small-btn confirm-btn-delete"
+                        className={confirmButtonClass}
                         disabled={isLoading}
                     >
-                        {isLoading ? 'Deleting...' : confirmText}
+                        {isLoading ? (isDeleteAction ? 'Удаление...' : isArchiveAction ? 'Архивирование...' : 'Обработка...') : confirmText}
                     </button>
                 </div>
             </div>

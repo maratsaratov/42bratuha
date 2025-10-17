@@ -1,0 +1,44 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+.app-main-layout {
+  display: flex;
+  flex-grow: 1;
+  margin-top: 0; 
+  padding-top: 0;
+}
+
+.app-content-area {
+  flex-grow: 1;
+  padding: 20px 25px;
+  overflow-y: auto; 
+  height: calc(100vh - 70px);
+  box-sizing: border-box;
+  background-color: #f0f2f5;
+  transition: margin-left 0.3s ease-in-out;
+  margin-left: 0; 
+}
+
+.app-content-area.has-bottom-nav {
+  padding-bottom: calc(60px + 20px);
+}
+
+.app-content-area > .container {
+  padding-top: 0;
+  margin-top: 0;
+}
+
+.app-content-area .control-bar {
+  margin-bottom: 20px; 
+}
+
+@media (max-width: 768px) {
+  .app-content-area {
+    padding: 15px;
+  }
+}

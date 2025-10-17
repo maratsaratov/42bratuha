@@ -1,0 +1,108 @@
+.landing-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 45px;
+  background-color: rgba(255, 255, 255, 0.9); 
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  z-index: 1000;
+  height: 110px; 
+  transition: height 0.35s cubic-bezier(0.4, 0, 0.2, 1), 
+              padding 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              background-color 0.35s ease,
+              box-shadow 0.35s ease;
+  box-sizing: border-box;
+}
+
+.landing-header.shrunk {
+  height: 65px;
+  padding: 0 25px;
+  background-color: #ffffff;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.landing-header-logo {
+  flex-shrink: 0; 
+}
+
+.landing-header-logo img {
+  height: 120px;
+  transition: height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  display: block;
+}
+
+.landing-header.shrunk .landing-header-logo img {
+  height: 50px;
+}
+
+.landing-header-sponsors {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.landing-sponsor-logo {
+  height: 80px;
+  object-fit: contain;
+  transition: height 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+  display: block;
+  opacity: 0.9;
+}
+.landing-sponsor-logo:hover {
+    opacity: 1;
+}
+
+.landing-header.shrunk .landing-sponsor-logo {
+  height: 35px;
+}
+
+@media (max-width: 992px) {
+  .landing-header {
+    padding: 0 30px;
+    height: 90px;
+  }
+  .landing-header.shrunk {
+    height: 60px;
+    padding: 0 20px;
+  }
+  .landing-header-logo img {
+    height: 60px;
+  }
+  .landing-header.shrunk .landing-header-logo img {
+    height: 40px;
+  }
+  .landing-sponsor-logo {
+    height: 45px;
+  }
+  .landing-header.shrunk .landing-sponsor-logo {
+    height: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .landing-header {
+    padding: 0 15px;
+    height: 75px;
+  }
+  .landing-header.shrunk {
+    height: 55px;
+    padding: 0 10px;
+  }
+  .landing-header-logo img {
+    height: 45px;
+  }
+  .landing-header.shrunk .landing-header-logo img {
+    height: 35px;
+  }
+  .landing-sponsor-logo {
+    height: 35px;
+  }
+  .landing-header.shrunk .landing-sponsor-logo {
+    height: 28px;
+  }
+}

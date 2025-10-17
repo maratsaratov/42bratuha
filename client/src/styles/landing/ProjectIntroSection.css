@@ -1,0 +1,69 @@
+.landing-project-intro-section {
+  background-color: #ffffff;
+}
+
+.landing-intro-grid {
+  display: grid;
+  grid-template-columns: minmax(300px, 0.9fr) 1.1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.landing-intro-name h2 {
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  color: #1a2530;
+  margin: 0;
+  font-weight: 700;
+  line-height: 1.25;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.landing-intro-name h2::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  width: 60px;
+  height: 4px;
+  background-color: #007bff;
+  border-radius: 2px;
+}
+
+
+.landing-intro-explanation p {
+  font-size: 1.1rem;
+  line-height: 1.85;
+  color: #5a6f80;
+  margin-bottom: 0;
+}
+
+.landing-intro-explanation p:not(:last-child) {
+  margin-bottom: 1em;
+}
+
+
+@media (max-width: 992px) {
+  .landing-intro-grid {
+    gap: 40px;
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .landing-intro-name h2 {
+    margin-bottom: 20px;
+  }
+  .landing-intro-name h2::before {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 768px) {
+  .landing-intro-name h2 {
+    font-size: clamp(2rem, 6vw, 2.8rem);
+  }
+  .landing-intro-explanation p {
+    font-size: 1rem;
+    line-height: 1.75;
+  }
+}

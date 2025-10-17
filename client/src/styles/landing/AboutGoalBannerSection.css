@@ -1,0 +1,114 @@
+.landing-agb-section {
+  background-color: #f4f7f6;
+  position: relative;
+  overflow: hidden;
+}
+
+.landing-agb-section::before {
+  content: '';
+  position: absolute;
+  top: -50px;
+  left: -50px;
+  width: 200px;
+  height: 200px;
+  background: rgba(0, 123, 255, 0.05);
+  border-radius: 50%;
+  z-index: 0;
+}
+
+.landing-agb-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 30px;
+  align-items: stretch;
+  position: relative;
+  z-index: 1;
+}
+
+.landing-agb-item {
+  background-color: #ffffff;
+  padding: 35px 30px;
+  border-radius: 8px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.landing-agb-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
+
+.landing-agb-item h3 {
+  font-size: 1.75rem;
+  color: #0056b3;
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+
+.landing-agb-item h3::before {
+  content: '✓';
+  margin-right: 10px;
+  color: #007bff;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+
+.landing-agb-item p {
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: #525f7f;
+  flex-grow: 1;
+  margin-bottom: 0;
+}
+
+.landing-agb-banner {
+  padding: 0;
+  overflow: hidden;
+  border-radius: 8px;
+  min-height: 300px;
+}
+
+.landing-agb-banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease-out;
+}
+
+.landing-agb-banner:hover img {
+    transform: scale(1.05);
+}
+
+
+@media (max-width: 992px) {
+  .landing-agb-grid { grid-template-columns: 1fr 1fr; }
+  .landing-agb-banner { grid-column: 1 / -1}
+  .landing-agb-item h3 {
+    font-size: 1.6rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .landing-agb-grid {
+    grid-template-columns: 1fr;
+  }
+  .landing-agb-item {
+    padding: 25px 20px;
+  }
+  .landing-agb-item h3 {
+    font-size: 1.5rem;
+  }
+   .landing-agb-item p {
+    font-size: 1rem;
+  }
+  .landing-agb-banner {
+    min-height: 250px;
+  }
+}

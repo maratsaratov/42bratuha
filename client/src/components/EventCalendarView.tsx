@@ -1,14 +1,27 @@
-import React from 'react';
-import { Calendar, momentLocalizer, View, ToolbarProps } from 'react-big-calendar';
+import React, { useState, memo, useCallback } from 'react';
+import { Calendar, momentLocalizer, ToolbarProps, NavigateAction, View, Messages } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { Event } from '../types';
+import { Event, EventType } from '../types';
+import { generateICS, downloadICS } from '../utils/icsUtils';
 
-// Настройка русской локализации
 moment.locale('ru', {
+  months : 'январь_февраль_март_апрель_май_июнь_июль_август_сентябрь_октябрь_ноябрь_декабрь'.split('_'),
+  monthsShort : 'янв._фев._мар._апр._мая_июня_июля_авг._сен._окт._ноя._дек.'.split('_'),
+  weekdays : 'воскресенье_понедельник_вторник_среда_четверг_пятница_суббота'.split('_'),
+  weekdaysShort : 'вс_пн_вт_ср_чт_пт_сб'.split('_'),
+  weekdaysMin : 'Вс_Пн_Вт_Ср_Чт_Пт_Сб'.split('_'),
+  longDateFormat : {
+      LT : 'HH:mm',
+      LTS : 'HH:mm:ss',
+      L : 'DD.MM.YYYY',
+      LL : 'D MMMM YYYY г.',
+      LLL : 'D MMMM YYYY г., HH:mm',
+      LLLL : 'dddd, D MMMM YYYY г., HH:mm'
+  },
   week: {
-    dow: 1, // Понедельник как первый день недели
-    doy: 4  // Первая неделя года содержит 4 января
+    dow: 1,
+    doy: 4
   }
 });
 const localizer = momentLocalizer(moment);
@@ -18,6 +31,7 @@ interface EventCalendarViewProps {
     isLoading: boolean;
     error: string | null;
     onViewDetails: (event: Event) => void;
+    onParticipationToggle?: (eventId: number, isParticipating: boolean) => Promise<void>;
 }
 
 interface CalendarEvent {
@@ -27,60 +41,95 @@ interface CalendarEvent {
     resource: Event;
 }
 
-const CustomToolbar = (props: ToolbarProps<CalendarEvent, object>) => {
-    const { label, onNavigate, onView, view } = props;
+interface CustomToolbarProps extends ToolbarProps<CalendarEvent, object> {
+    events: CalendarEvent[];
+}
+
+const CustomToolbar = (props: CustomToolbarProps) => {
+    const { label, onNavigate, events } = props;
     
-    // Доступные виды календаря с русскими названиями
-    const availableViews = [
-        { key: 'month', label: 'Месяц' },
-        { key: 'week', label: 'Неделя' },
-        { key: 'day', label: 'День' },
-        { key: 'agenda', label: 'Повестка дня' }
-    ];
+    const handleExport = useCallback(() => {
+        const currentMonthEvents = events.filter(event => 
+            moment(event.start).isSameOrBefore(moment(props.date).endOf('month')) &&
+            moment(event.end).isSameOrAfter(moment(props.date).startOf('month'))
+        ).map(event => event.resource);
+
+        if (currentMonthEvents.length === 0) {
+            alert('Нет мероприятий для экспорта в текущем месяце.');
+            return;
+        }
+        
+        const icsData = generateICS(currentMonthEvents);
+        downloadICS(icsData, `Мероприятия_КемГУ_${moment(props.date).format('YYYY-MM')}.ics`);
+    }, [events, props.date]);
 
     return (
-        <div className="rbc-toolbar">
-            {/* Левая группа кнопок - навигация */}
+        <div className="rbc-toolbar custom-toolbar">
+            <span className="rbc-toolbar-label">{label}</span>
             <span className="rbc-btn-group">
-                <button 
-                    type="button" 
-                    className="rbc-nav-button"
-                    onClick={() => onNavigate('PREV')}
-                >
-                    ◄
+                <button type="button" className="rbc-nav-btn" onClick={() => onNavigate('PREV')}>
+                    {'<'}
                 </button>
-                <button 
-                    type="button" 
-                    className="rbc-today-button"
-                    onClick={() => onNavigate('TODAY')}
-                >
+                <button type="button" className="rbc-today-btn" onClick={() => onNavigate('TODAY')}>
                     Сегодня
                 </button>
-                <button 
-                    type="button" 
-                    className="rbc-nav-button"
-                    onClick={() => onNavigate('NEXT')}
-                >
-                    ►
+                <button type="button" className="rbc-nav-btn" onClick={() => onNavigate('NEXT')}>
+                    {'>'}
+                </button>
+                <button type="button" className="secondary-btn small-btn rbc-export-btn" onClick={handleExport}>
+                    Экспорт
                 </button>
             </span>
-            
-            {/* Название текущего периода */}
-            <span className="rbc-toolbar-label">{label}</span>
-            
-            {/* Правая группа кнопок - переключение видов */}
-            <span className="rbc-btn-group">
-                {availableViews.map(v => (
-                    <button
-                        type="button"
-                        key={v.key}
-                        className={`rbc-view-button ${view === v.key ? 'rbc-active' : ''}`}
-                        onClick={() => onView(v.key as View)}
-                    >
-                        {v.label}
-                    </button>
-                ))}
-            </span>
+        </div>
+    );
+};
+
+interface ShowMorePopupProps {
+    events: CalendarEvent[];
+    date: Date;
+    onClose: () => void;
+    onSelectEvent: (event: CalendarEvent) => void;
+    onParticipationToggle?: (eventId: number, isParticipating: boolean) => Promise<void>;
+}
+
+const getEventColor = (eventType: EventType) => {
+    switch (eventType) {
+        case EventType.CULTURAL: return 'var(--color-cultural, #e67e22)';
+        case EventType.SPORTS: return 'var(--color-sports, #e74c3c)';
+        case EventType.EDUCATIONAL: return 'var(--color-educational, #3498db)';
+        case EventType.SOCIAL: return 'var(--color-social, #27ae60)';
+        default: return 'var(--color-other, #8e44ad)';
+    }
+}
+
+const ShowMorePopup: React.FC<ShowMorePopupProps> = ({ events, date, onClose, onSelectEvent, onParticipationToggle }) => {
+    return (
+        <div className="show-more-popup-overlay" onClick={onClose}>
+            <div className="show-more-popup" onClick={(e) => e.stopPropagation()}>
+                <div className="show-more-popup-header">
+                    <h4>{moment(date).format('D MMMM YYYY г.')}</h4>
+                    <button onClick={onClose} className="close-btn">×</button>
+                </div>
+                <div className="show-more-popup-body">
+                    {events.map(event => (
+                        <div
+                            key={event.resource.id}
+                            className="popup-event-item"
+                            style={{ backgroundColor: getEventColor(event.resource.event_type) }}
+                        >
+                            <span onClick={() => onSelectEvent(event)} className="popup-event-title-link">{event.title}</span>
+                            {onParticipationToggle && (
+                                <button
+                                    onClick={(e) => { e.stopPropagation(); onParticipationToggle(event.resource.id, event.resource.is_participating || false); }}
+                                    className={`secondary-btn small-btn calendar-participate-btn ${event.resource.is_participating ? 'participating' : ''}`}
+                                >
+                                    {event.resource.is_participating ? 'Записан' : 'Пойду'}
+                                </button>
+                            )}
+                        </div>
+                    ))}
+                </div>
+            </div>
         </div>
     );
 };
@@ -90,16 +139,16 @@ const EventCalendarView: React.FC<EventCalendarViewProps> = ({
     isLoading,
     error,
     onViewDetails,
+    onParticipationToggle,
 }) => {
-    const [currentView, setCurrentView] = React.useState<View>('month');
-    const [currentDate, setCurrentDate] = React.useState<Date>(new Date());
+    const [currentDate, setCurrentDate] = useState(new Date());
+    const [popupState, setPopupState] = useState<{ date: Date, events: CalendarEvent[] } | null>(null);
 
-    // Преобразование событий для календаря
     const calendarEvents: CalendarEvent[] = events.map((event) => {
         const startDate = new Date(event.start_datetime);
         const endDate = event.end_datetime 
             ? new Date(event.end_datetime) 
-            : new Date(startDate.getTime() + 60 * 60 * 1000); // +1 час если нет end_datetime
+            : new Date(startDate.getTime() + 60 * 60 * 1000);
 
         return {
             title: event.title,
@@ -109,28 +158,40 @@ const EventCalendarView: React.FC<EventCalendarViewProps> = ({
         };
     });
 
-    // Обработчики событий
     const handleSelectEvent = (calendarEvent: CalendarEvent) => {
         onViewDetails(calendarEvent.resource);
+        if (popupState) setPopupState(null);
     };
 
-    const eventStyleGetter = () => ({
+    const handleShowMore = useCallback((moreEvents: CalendarEvent[], date: Date) => {
+        setPopupState({ events: moreEvents, date });
+    }, []);
+    
+    const handleNavigate = useCallback((newDate: Date, view: View, action: NavigateAction) => {
+        setCurrentDate(newDate);
+    }, []);
+
+    const eventStyleGetter = (event: CalendarEvent) => ({
         style: {
-            backgroundColor: '#007bff',
-            borderRadius: '5px',
-            opacity: 0.8,
-            color: 'white',
-            border: '0px',
-            display: 'block',
-            fontSize: '0.85em',
-            padding: '2px 5px'
+            backgroundColor: getEventColor(event.resource.event_type),
         }
     });
 
-    const handleViewChange = (view: View) => setCurrentView(view);
-    const handleNavigate = (newDate: Date) => setCurrentDate(newDate);
+    const messages: Messages = {
+        month: 'Месяц',
+        week: 'Неделя',
+        day: 'День',
+        agenda: 'Повестка',
+        date: 'Дата',
+        time: 'Время',
+        event: 'Событие',
+        noEventsInRange: 'В этом диапазоне нет событий.',
+        showMore: (total: number) => `+ ${total}`,
+        today: 'Сегодня',
+        previous: '<',
+        next: '>',
+    };
 
-    // Состояния загрузки и ошибки
     if (isLoading) {
         return <div className="event-list-loading card">Загрузка календаря...</div>;
     }
@@ -145,30 +206,31 @@ const EventCalendarView: React.FC<EventCalendarViewProps> = ({
                 events={calendarEvents}
                 startAccessor="start"
                 endAccessor="end"
-                style={{ height: 600 }}
-                view={currentView}
+                style={{ height: '70vh', minHeight: '600px' }}
+                views={['month']}
+                defaultView="month"
                 date={currentDate}
-                onView={handleViewChange}
                 onNavigate={handleNavigate}
                 onSelectEvent={handleSelectEvent}
+                onShowMore={handleShowMore}
+                messages={messages}
                 eventPropGetter={eventStyleGetter}
                 components={{
-                    toolbar: CustomToolbar
+                    toolbar: (toolbarProps) => <CustomToolbar {...toolbarProps} events={calendarEvents} />,
                 }}
-                messages={{
-                    today: 'Сегодня',
-                    previous: '◄',
-                    next: '►',
-                    month: 'Месяц',
-                    week: 'Неделя',
-                    day: 'День',
-                    agenda: 'Повестка дня',
-                    noEventsInRange: 'Нет событий в этом диапазоне',
-                    showMore: total => `+${total} ещё`
-                }}
+                popup={false}
             />
+            {popupState && (
+                <ShowMorePopup 
+                    events={popupState.events} 
+                    date={popupState.date}
+                    onClose={() => setPopupState(null)}
+                    onSelectEvent={handleSelectEvent}
+                    onParticipationToggle={onParticipationToggle}
+                />
+            )}
         </div>
     );
 };
 
-export default EventCalendarView;
+export default memo(EventCalendarView);

@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm, SubmitHandler, FieldErrors } from 'react-hook-form';
-import { toast } from 'react-toastify';
+import { UserIcon, EmailIcon, LockIcon, EyeOpenIcon, EyeClosedIcon } from './icons';
 
 type LoginFormInputs = {
   email: string;
@@ -22,24 +22,26 @@ interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (formData: AuthFormData) => Promise<void>;
+  variant: 'login' | 'register';
   title: string;
   submitButtonText: string;
+  onSwitchForm?: (targetForm: 'login' | 'register') => void; 
+  onForgotPassword?: () => void;
 }
-
-const ClearIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-    </svg>
-);
 
 const AuthModal: React.FC<AuthModalProps> = ({
   isOpen,
   onClose,
   onSubmit,
+  variant,
   title,
   submitButtonText,
+  onSwitchForm,
+  onForgotPassword,
 }) => {
-  const isRegister = title === 'Регистрация';
+  const isRegister = variant === 'register';
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const {
     register,
@@ -47,7 +49,6 @@ const AuthModal: React.FC<AuthModalProps> = ({
     formState: { errors, isSubmitting },
     reset,
     watch,
-    setValue,
   } = useForm<AuthFormData>({
     mode: 'onBlur',
     defaultValues: {
@@ -59,9 +60,6 @@ const AuthModal: React.FC<AuthModalProps> = ({
   });
 
   const passwordValue = watch('password');
-  const emailValue = watch('email');
-  const usernameValue = watch('username');
-  const confirmPasswordValue = watch('confirm_password');
 
   useEffect(() => {
     if (isOpen) {
@@ -71,8 +69,10 @@ const AuthModal: React.FC<AuthModalProps> = ({
         username: "",
         confirm_password: ""
       });
+      setShowPassword(false);
+      setShowConfirmPassword(false);
     }
-  }, [isOpen, title, reset]);
+  }, [isOpen, reset]);
 
 
   const handleFormSubmit: SubmitHandler<AuthFormData> = async (data) => {
@@ -84,12 +84,8 @@ const AuthModal: React.FC<AuthModalProps> = ({
        }
        await onSubmit(cleanData);
     } catch (err) {
-        toast.error(err instanceof Error ? err.message : 'Произошла неизвестная ошибка');
+        console.error("AuthModal submission error:", err);
     }
-  };
-
-  const handleClearInput = (fieldName: keyof AuthFormData) => {
-      setValue(fieldName, '', { shouldValidate: true, shouldDirty: true });
   };
 
   const registerErrors = errors as RegisterFieldErrors;
@@ -99,136 +95,152 @@ const AuthModal: React.FC<AuthModalProps> = ({
   }
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+    <div className="modal-overlay auth-modal-overlay" onClick={onClose}>
+      <div className="modal-content auth-modal-content" onClick={(e) => e.stopPropagation()}>
         <button
             onClick={onClose}
-            style={{ position: 'absolute', top: '10px', right: '10px', background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer', lineHeight: '1', padding: '0' }}
+            className="auth-modal-close-btn"
             disabled={isSubmitting}
             aria-label="Закрыть"
         >
             ×
         </button>
-        <h2>{title}</h2>
-        <form onSubmit={handleSubmit(handleFormSubmit)} className="form" noValidate>
+        <h2 className="auth-modal-title">{title}</h2>
+        <form onSubmit={handleSubmit(handleFormSubmit)} className="auth-form" noValidate>
 
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <div className="input-wrapper">
+          {isRegister && (
+            <div className={`form-group auth-form-group ${errors.username ? 'has-error' : ''}`}>
+              <label htmlFor="username_auth" className="auth-label">Имя пользователя</label>
+              <div className="input-wrapper auth-input-wrapper">
+                  <UserIcon />
+                  <input
+                    type="text"
+                    id="username_auth"
+                    placeholder="Введите ваше имя пользователя"
+                    className={`auth-input ${errors.username ? 'input-error' : ''}`}
+                    {...register("username", { 
+                        required: "Имя пользователя обязательно",
+                        minLength: { value: 3, message: "Минимум 3 символа" }
+                    })}
+                    disabled={isSubmitting}
+                    autoComplete="username"
+                  />
+               </div>
+              {errors.username && <span className="error-message auth-error-message">{errors.username.message}</span>}
+            </div>
+          )}
+
+          <div className={`form-group auth-form-group ${errors.email ? 'has-error' : ''}`}>
+            <label htmlFor="email_auth" className="auth-label">Email</label>
+            <div className="input-wrapper auth-input-wrapper">
+                <EmailIcon />
                 <input
                     type="email"
-                    id="email"
-                    className={errors.email ? 'input-error' : ''}
+                    id="email_auth"
+                    placeholder="example@mail.com"
+                    className={`auth-input ${errors.email ? 'input-error' : ''}`}
                     {...register("email", {
                         required: "Email обязателен",
-                        pattern: { value: /^\S+@\S+$/i, message: "Неверный формат email" }
+                        pattern: { value: /^\S+@\S+\.\S+$/i, message: "Неверный формат email" }
                     })}
                     disabled={isSubmitting}
                     autoComplete="email"
                 />
-                {emailValue && !isSubmitting && (
-                    <button
-                      type="button"
-                      className="clear-input-btn"
-                      onClick={() => handleClearInput('email')}
-                      aria-label="Очистить Email"
-                      title="Очистить Email"
-                    >
-                      <ClearIcon />
-                    </button>
-                )}
             </div>
-             {errors.email && <span className="error-message">{errors.email.message}</span>}
+             {errors.email && <span className="error-message auth-error-message">{errors.email.message}</span>}
           </div>
 
-          {isRegister && (
-            <div className="form-group">
-              <label htmlFor="username">Имя пользователя</label>
-               <div className="input-wrapper">
-                  <input
-                    type="text"
-                    id="username"
-                    className={registerErrors.username ? 'input-error' : ''}
-                    {...register("username", { required: isRegister ? "Имя пользователя обязательно" : false })}
-                    disabled={isSubmitting}
-                    autoComplete="username"
-                  />
-                  {usernameValue && !isSubmitting && (
-                    <button
-                      type="button"
-                      className="clear-input-btn"
-                      onClick={() => handleClearInput('username')}
-                      aria-label="Очистить Имя пользователя"
-                      title="Очистить Имя пользователя"
-                    >
-                      <ClearIcon />
-                    </button>
-                 )}
-               </div>
-              {registerErrors.username && <span className="error-message">{registerErrors.username.message}</span>}
-            </div>
-          )}
-
-          <div className="form-group">
-            <label htmlFor="password">Пароль</label>
-             <div className="input-wrapper">
+          <div className={`form-group auth-form-group ${errors.password ? 'has-error' : ''}`}>
+            <label htmlFor="password_auth" className="auth-label">Пароль</label>
+             <div className="input-wrapper auth-input-wrapper">
+                <LockIcon />
                 <input
-                    type="password"
-                    id="password"
-                    className={errors.password ? 'input-error' : ''}
-                    {...register("password", { required: "Пароль обязателен" })}
+                    type={showPassword ? "text" : "password"}
+                    id="password_auth"
+                    placeholder={isRegister ? "Создайте надежный пароль" : "Введите ваш пароль"}
+                    className={`auth-input ${errors.password ? 'input-error' : ''}`}
+                    {...register("password", { 
+                        required: "Пароль обязателен",
+                        minLength: isRegister ? { value: 6, message: "Пароль должен быть не менее 6 символов" } : undefined
+                    })}
                     disabled={isSubmitting}
                     autoComplete={isRegister ? "new-password" : "current-password"}
                 />
-                 {passwordValue && !isSubmitting && (
-                    <button
-                      type="button"
-                      className="clear-input-btn"
-                      onClick={() => handleClearInput('password')}
-                      aria-label="Очистить Пароль"
-                      title="Очистить Пароль"
-                    >
-                      <ClearIcon />
-                    </button>
-                 )}
+                <button 
+                  type="button" 
+                  className="password-toggle-btn" 
+                  onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? "Скрыть пароль" : "Показать пароль"}
+                  aria-pressed={showPassword}
+                >
+                  {showPassword ? <EyeClosedIcon /> : <EyeOpenIcon />}
+                </button>
             </div>
-            {errors.password && <span className="error-message">{errors.password.message}</span>}
+            {errors.password && <span className="error-message auth-error-message">{errors.password.message}</span>}
           </div>
 
           {isRegister && (
-            <div className="form-group">
-              <label htmlFor="confirm_password">Подтвердите пароль</label>
-              <div className="input-wrapper">
+            <div className={`form-group auth-form-group ${registerErrors.confirm_password ? 'has-error' : ''}`}>
+              <label htmlFor="confirm_password_auth" className="auth-label">Подтвердите пароль</label>
+              <div className="input-wrapper auth-input-wrapper">
+                  <LockIcon />
                   <input
-                    type="password"
-                    id="confirm_password"
-                    className={registerErrors.confirm_password ? 'input-error' : ''}
+                    type={showConfirmPassword ? "text" : "password"}
+                    id="confirm_password_auth"
+                    placeholder="Повторите пароль"
+                    className={`auth-input ${registerErrors.confirm_password ? 'input-error' : ''}`}
                     {...register("confirm_password", {
-                        required: isRegister ? "Подтверждение пароля обязательно" : false,
-                        validate: value => isRegister ? (value === passwordValue || "Пароли не совпадают") : true
+                        required: "Подтверждение пароля обязательно",
+                        validate: value => value === passwordValue || "Пароли не совпадают"
                     })}
                     disabled={isSubmitting}
                     autoComplete="new-password"
                    />
-                   {confirmPasswordValue && !isSubmitting && (
-                        <button
-                          type="button"
-                          className="clear-input-btn"
-                          onClick={() => handleClearInput('confirm_password')}
-                          aria-label="Очистить Подтверждение пароля"
-                          title="Очистить Подтверждение пароля"
-                        >
-                          <ClearIcon />
-                        </button>
-                    )}
+                   <button 
+                    type="button" 
+                    className="password-toggle-btn" 
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    aria-label={showConfirmPassword ? "Скрыть подтверждение пароля" : "Показать подтверждение пароля"}
+                    aria-pressed={showConfirmPassword}
+                   >
+                    {showConfirmPassword ? <EyeClosedIcon /> : <EyeOpenIcon />}
+                  </button>
                </div>
-               {registerErrors.confirm_password && <span className="error-message">{registerErrors.confirm_password.message}</span>}
+               {registerErrors.confirm_password && <span className="error-message auth-error-message">{registerErrors.confirm_password.message}</span>}
             </div>
           )}
 
-          <button type="submit" className="primary-btn" disabled={isSubmitting} style={{marginTop: '1rem'}}>
+          {!isRegister && onForgotPassword && (
+            <div className="auth-form-extra-links">
+              <button type="button" onClick={onForgotPassword} className="forgot-password-link">
+                Забыли пароль?
+              </button>
+            </div>
+          )}
+
+          <button type="submit" className="primary-btn auth-submit-btn" disabled={isSubmitting}>
             {isSubmitting ? 'Обработка...' : submitButtonText}
           </button>
+
+          {onSwitchForm && (
+            <div className="auth-switch-form">
+              {isRegister ? (
+                <>
+                  Уже есть аккаунт?{' '}
+                  <button type="button" onClick={() => onSwitchForm('login')} className="switch-form-link">
+                    Войти
+                  </button>
+                </>
+              ) : (
+                <>
+                  Нет аккаунта?{' '}
+                  <button type="button" onClick={() => onSwitchForm('register')} className="switch-form-link">
+                    Зарегистрироваться
+                  </button>
+                </>
+              )}
+            </div>
+          )}
         </form>
       </div>
     </div>

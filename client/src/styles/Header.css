@@ -1,78 +1,272 @@
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 1rem;
-    margin-bottom: 1.5rem;
-    border-bottom: 1px solid #eee;
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-  
-  .header-content {
-    text-align: left;
-    flex-grow: 1;
-  }
-  
-  .header h1 {
-    color: #1a1a1a;
-    font-size: 2.5rem;
-    margin-bottom: 0.25rem;
-  }
-  
-  .header p {
-    color: #666;
-    font-size: 1.1rem;
-    margin: 0;
-  }
-  
-  .auth-buttons {
-    display: flex;
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 25px;
+  height: 70px;
+  background-color: #ffffff;
+  color: #333333;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.app-header-left {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  flex-shrink: 0;
+}
+
+.app-header-logo-link {
+  display: inline-block;
+}
+
+.app-header-logo-img {
+  height: 80px;
+  display: block;
+}
+
+.app-header-center {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.app-header-nav {
+  display: flex;
+  gap: 10px;
+  background-color: #f0f2f5;
+  padding: 6px;
+  border-radius: 10px;
+}
+
+.app-header-nav-link {
+  color: #333;
+  background-color: transparent;
+  text-decoration: none;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+  white-space: nowrap;
+}
+
+.app-header-nav-link:hover:not(.active) {
+  background-color: #e9ecef;
+}
+
+.app-header-nav-link.active {
+  background-color: #ffffff;
+  color: #0056b3;
+  font-weight: 600;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+.app-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.app-header-action-btn {
+  background: none;
+  border: none;
+  color: #555555;
+  padding: 7px;
+  cursor: pointer;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.app-header-action-btn:hover {
+  background-color: #f0f0f0;
+  color: #0056b3;
+}
+
+.header-action-icon {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+.app-header-notification-badge {
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  background-color: #e74c3c;
+  color: white;
+  font-size: 0.65rem;
+  font-weight: bold;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  border: 1px solid #ffffff;
+  box-shadow: 0 0 3px rgba(0,0,0,0.3);
+}
+
+.app-header-user-menu {
+  position: relative;
+  margin-left: 8px;
+}
+
+.app-header-user-avatar-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 50%;
+  overflow: hidden;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid transparent;
+  transition: border-color 0.2s ease;
+}
+.app-header-user-avatar-button:hover,
+.app-header-user-avatar-button:focus-visible {
+  border-color: #007bff;
+}
+.app-header-user-avatar-button:focus {
+  outline: none;
+}
+
+.header-user-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  fill: #cccccc;
+}
+
+.app-header-dropdown {
+  display: block; 
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s linear 0.2s;
+  position: absolute;
+  top: calc(100% + 5px); 
+  right: 0;
+  background-color: #ffffff;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-width: 180px;
+  z-index: 1000;
+  padding: 6px 0;
+  color: #333;
+  list-style: none;
+  margin: 0;
+}
+
+.app-header-dropdown.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition-delay: 0s;
+}
+
+.dropdown-user-info {
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  color: #555;
+  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: 4px;
+}
+
+.dropdown-link {
+  display: block;
+  padding: 8px 12px;
+  color: #333;
+  text-decoration: none;
+  font-size: 0.9rem;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.dropdown-link:hover {
+  background-color: #f1f3f5;
+  color: #0056b3;
+  text-decoration: none;
+}
+.dropdown-logout-btn {
+  color: #dc3545;
+}
+.dropdown-logout-btn:hover {
+  color: #c82333;
+  background-color: #fce8e6;
+}
+
+@media (max-width: 1024px) {
+  .app-header-left {
     gap: 12px;
-    align-items: center;
-    flex-shrink: 0;
   }
-  
-  .auth-buttons span {
-    margin-right: 15px;
-    color: #333;
-    white-space: nowrap;
+  .app-header-nav-link {
+    padding: 6px 15px;
   }
-  
-  @media (max-width: 768px) {
-    .header {
-        align-items: center;
-        justify-content: space-between;
-        gap: 1rem;
-        margin-bottom: 1rem;
+  .app-header-right {
+    gap: 4px;
+  }
+  .app-header-action-btn {
+    padding: 6px;
+  }
+  .header-action-icon {
+    width: 18px;
+    height: 18px;
+  }
+  .app-header-user-avatar-button {
+    width: 34px;
+    height: 34px;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-header {
+    padding: 0 10px;
+    height: 60px;
+  }
+  .app-header-logo-img {
+    height: 32px;
+  }
+  .app-header-center, .app-header-nav {
+    display: none;
+  }
+  .app-header-left {
+    flex-grow: 0;
+  }
+  .app-header-right {
+    margin-left: auto;
+  }
+}
+
+@media (max-width: 480px) {
+    .app-header-action-btn[title="Уведомления"],
+    .app-header-user-menu {
+        display: flex;
     }
-    .header-content {
-        text-align: left;
-        min-width: auto;
+    .app-header-right {
+        gap: 8px;
     }
-     .header h1 {
-        font-size: 1.8rem;
-     }
-     .header p {
-         font-size: 1rem;
-     }
-     .auth-buttons {
-         justify-content: flex-end;
-         width: auto;
-     }
-     .auth-buttons span {
-         margin-right: 10px;
-     }
-  }
-  
-  @media (max-width: 480px) {
-      .header h1 {
-        font-size: 1.5rem;
-      }
-      .header p {
-          font-size: 0.9rem;
-      }
-      .auth-buttons {
-          gap: 8px;
-      }
-  }
+     .app-header-logo-img {
+        height: 30px;
+    }
+}
